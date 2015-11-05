@@ -5,5 +5,5 @@
 	*/
 	class Post extends Model
 	{
-
+		
 	}
