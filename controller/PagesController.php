@@ -8,10 +8,26 @@ class PagesController extends Controller
 	
 	function view($id){
 		$this->loadModel('Post');
-		$posts = $this->Post->find(array(
-			//'conditions' => 'id="1"'
+		$d['page'] = $this->Post->findFirst(array(
+			'conditions' => 'id='.$id
 		));
-		print_r($posts);
+		if(empty($d['page'])){
+			$this->e404('Page introuvable');
+		}
+
+		$this->set($d);
 	}
+
+
+	/**
+	*ALLOW TO GET ALL PAGES ON MENU
+	**/
+	function getMenu(){
+		$this->loadModel('Post');
+		return $this->Post->find(array(
+			'conditions' => array('online' =>1, 'type'=>'page')
+		));
+	}
+
 
 }

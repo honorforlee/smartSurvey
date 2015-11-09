@@ -14,8 +14,10 @@ class Controller
 	*CONSTRUCT
 	*@param $request : obeject
 	**/
-	function __construct($request){
-		$this->request = $request;
+	function __construct($request = null){
+		if($request){
+			$this->request = $request; //insatnce request
+		}
 	}
 
 	/**
@@ -61,7 +63,7 @@ class Controller
 
 	/**
 	*ALLOW TO LOAD MODEL
-	*
+	*@param $name : MODEL NAME
 	**/
 	function loadModel($name){
 		$file = WEBROOT.DS.'model'.DS.$name.'.php';
@@ -72,6 +74,26 @@ class Controller
 			echo 'Did not loaded';
 		}
 		
+	}
+
+	/**
+	*
+	*
+	**/
+	function request($controller, $action){
+		$controller .= 'Controller';
+		require_once WEBROOT.DS.'controller'.DS.$controller.'.php';
+		$c = new $controller();
+		return $c->$action();
+	}
+
+	/**
+	*ERRORS 404 
+	**/
+	function e404($message){
+		header("HTTP/1.0 404 Not Found");
+		$this->set('msg', $message);
+		$this->render('/errors/404');
 	}
 
 }

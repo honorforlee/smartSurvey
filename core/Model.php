@@ -19,7 +19,11 @@
 				return true; //DATABASE IS CONNECTED
 			}
 			try{
-				$pdo =  new PDO('mysql:host='.$conf['host'].';dbname='.$conf['database'].';', $conf['login'], $conf['password']);
+				$pdo =  new PDO('mysql:host='.$conf['host'].';dbname='.$conf['database'].';',
+				 $conf['login'],
+				 $conf['password']
+				 //array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+				 );
 				Model::$connexions[$this->db] = $pdo;
 				$this->dbconx= $pdo;
 				//echo 'success connexions';
@@ -38,13 +42,24 @@
 				$this->table =  strtolower(get_class($this)).'s';
 			}
 		}
+
+
+		/**
+		*FUNCTION SELECT FROM DATABASE
+		*@param $req  : REQUEST
+		*@param $req['conditions'] : REQUEST CONDITIONS
+		*@param table : IF IS NOT SET (PLURAL OF THE MODEL NAME)
+		**/
 		public function find($req) {
 			
-		    $sql ='SELECT *FROM '.$this->table.' as ' .get_class($this).' ';
+		    $sql ='SELECT * FROM '.$this->table.' as ' .get_class($this).' ';
+
+		    //CONDITION CONSTRUCTION
 	        if (isset($req['conditions'])) {
-	            $sql.='WHERE ';
+	        	$sql.='WHERE ';
+
 	            if (!is_array($req['conditions'])) {
-	                $sql.=$req['conditons'];
+	                $sql .=$req['conditions'];
 	            }else{
 	                $cond=array();
 	                foreach ($req['conditions'] as $k => $v) {
@@ -52,20 +67,27 @@
 	                        $v='"'.mysql_escape_string($v).'"';
 	                    }
 
-
 	                    $cond = "$k=$v";
 	                }
 	                $sql.= implode (' AND ', $cond);
 	            }
 	        }
+
 	        $pre =$this->dbconx->prepare($sql);
 	        $pre->execute();
+
 	        return $pre->fetchAll(PDO::FETCH_OBJ);
 
 	    }
 
-	    public function findFirst($re){
-	    	
+	    public function findFirst($req){
+	    	return current ($this->find($req));
+	    }
+
+	    public function debug($c){
+			echo '<pre>';
+			print_r($c);
+			echo '</pre>';
 	    }
 
 

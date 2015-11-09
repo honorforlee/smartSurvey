@@ -14,7 +14,7 @@ class Dispatcher{
 		$controller = $this->loadController();
 		
 		//IF ACTION DOES NOT EXIST WRITE ERROR
-		if(!in_array($this->request->action, get_class_methods($controller) )){
+		if(!in_array($this->request->action, array_diff(get_class_methods($controller), get_class_methods('Controller')) )){
 			$this->error('The controller'. $this->request->controller. 'has not a method named ' . $this->request->action );
 		}
 		else {//ELSE CALL ACTION AND PARAMS
@@ -26,10 +26,8 @@ class Dispatcher{
 
 	//FUNCTION ERROR 404 NOT FOUND
 	function error($msg){
-		header("HTTP/1.0 404 Not Found");
 		$controller = new Controller($this->request);
-		$controller->set('msg', $msg);
-		$controller->render('/errors/404');
+		$controller->e404($message);
 	}
 
 	function loadController(){	
