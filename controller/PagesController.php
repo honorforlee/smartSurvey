@@ -25,7 +25,7 @@ class PagesController extends Controller
 	function getMenu(){
 		$this->loadModel('Post');
 		return $this->Post->find(array(
-			'conditions' => array('online' =>1, 'type'=>'page')
+			'conditions' => array('online' =>1, 'type_page'=>'page')
 		));
 	}
 

@@ -12,6 +12,11 @@
 
 		public function __construct()
 		{	
+			//GET TABLE
+			if($this->table === false){
+				$this->table =  strtolower(get_class($this)).'s';
+			}
+
 			//CONNECT TO  DATABASE
 			$conf = Conf::$database[$this->db];
 			if (isset(Model::$connexions[$this->db])){
@@ -37,10 +42,7 @@
 
 				
 			}
-			//GET TABLE
-			if($this->table === false){
-				$this->table =  strtolower(get_class($this)).'s';
-			}
+
 		}
 
 
@@ -64,15 +66,20 @@
 	                $cond=array();
 	                foreach ($req['conditions'] as $k => $v) {
 	                    if (!is_numeric($v)) {
-	                        $v='"'.mysql_escape_string($v).'"';
+	                        $v='"'. addslashes($v).'"';
 	                    }
 
 	                    $cond = "$k=$v";
 	                }
-	                $sql.= implode (' AND ', $cond);
+	                if(count($cond)>1){
+ 						$sql .= implode(' AND ', $cond);
+	                }
+	                else {
+	                	 $sql .=  $cond;
+	                }
+	              
 	            }
 	        }
-
 	        $pre =$this->dbconx->prepare($sql);
 	        $pre->execute();
 

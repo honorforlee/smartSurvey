@@ -77,8 +77,9 @@ class Controller
 	}
 
 	/**
-	*
-	*
+	*REQUEST : load controller and call action
+	*@param $controller : controller to call
+	*@param $action     : action to call
 	**/
 	function request($controller, $action){
 		$controller .= 'Controller';

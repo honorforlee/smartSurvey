@@ -24,9 +24,9 @@
       
     
       <ul class="nav navbar-nav navbar-right">
-      <?php $pageMenu =$this->request('Pages', 'getMenu'); ?>
-	    <?php  foreach($pages as $p): ?>
-    	    <li><a href="<?php echo BASE_URL.'/pages/view/'. $p->id; ?>"><?php echo $p->title; ?></a></li>
+      <?php $pageMenu =$this->request('Pages', 'getMenu');?>
+	    <?php  foreach($pageMenu as $p): ?>
+    	    <li><a href="<?php echo BASE_URL.'/pages/view/'. $p->id; ?>"><?php echo $p->title;  ?></a></li>
     	<?php endforeach; ?>
 
 
