@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title><?php echo isset($title_for_layout)?  $title_for_layout:'Mon site'  ; ?></title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="<?php echo BASE_URL.'/webroot/css/main.css' ?>" >
 </head>
 <body>
 

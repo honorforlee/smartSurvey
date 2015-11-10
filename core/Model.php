@@ -47,55 +47,89 @@
 
 
 		/**
-		*FUNCTION SELECT FROM DATABASE
-		*@param $req  : REQUEST
-		*@param $req['conditions'] : REQUEST CONDITIONS
-		*@param table : IF IS NOT SET (PLURAL OF THE MODEL NAME)
+		*FUNCTION BIND VALUE
+		*
 		**/
-		public function find($req) {
-			
-		    $sql ='SELECT * FROM '.$this->table.' as ' .get_class($this).' ';
+		public function bind($param, $value, $type = null){
+		    if (is_null($type)) {
+		        switch (true) {
+		            case is_int($value):
+		                $type = PDO::PARAM_INT;
+		                break;
+		            case is_bool($value):
+		                $type = PDO::PARAM_BOOL;
+		                break;
+		            case is_null($value):
+		                $type = PDO::PARAM_NULL;
+		                break;
+		            default:
+		                $type = PDO::PARAM_STR;
+		        }
+		    }
+		    $this->stmt->bindValue($param, $value, $type);
+		}
 
+		/**
+		*FUNCTION QUERY : TRANSFORM ARRAY TO QUERY 
+		*@param $req['conditions'] : REQUEST CONDITIONS
+		**/
+		public function SelectAll($req){
+			
+			//Query select
+		    $sql ='SELECT * FROM '.$this->table.' as ' .get_class($this).' ';
+		   
 		    //CONDITION CONSTRUCTION
 	        if (isset($req['conditions'])) {
-	        	$sql.='WHERE ';
-
+	        	$sql .='WHERE ';
+ 				 //if req is not an array : add 1 conditon
 	            if (!is_array($req['conditions'])) {
 	                $sql .=$req['conditions'];
-	            }else{
+
+	            }
+	            //if is an array
+	            else{
 	                $cond=array();
 	                foreach ($req['conditions'] as $k => $v) {
+	                	//if si not numeric add slashes
 	                    if (!is_numeric($v)) {
 	                        $v='"'. addslashes($v).'"';
 	                    }
-
-	                    $cond = "$k=$v";
+	                    $cond[$k] = "$k=$v" ;
 	                }
-	                if(count($cond)>1){
- 						$sql .= implode(' AND ', $cond);
+	                if(count($cond)>1){//Impload conditions with 'AND'
+	                	$sql .= implode(' AND ', $cond);
 	                }
-	                else {
+	                else {//WHRITE SQL
 	                	 $sql .=  $cond;
 	                }
-	              
 	            }
-	        }
-	        $pre =$this->dbconx->prepare($sql);
+	        } 
+		}
+
+
+		/**
+		*FUNCTION SELECT FROM DATABASE
+		*@param $req  : REQUEST
+		*@param $req['conditions'] : REQUEST CONDITIONS
+		**/
+		public function find($req) {
+			
+			$sql = $this->SelectAll($req);
+	        $pre = $this->dbconx->prepare($sql);
 	        $pre->execute();
 
 	        return $pre->fetchAll(PDO::FETCH_OBJ);
 
 	    }
 
-	    public function findFirst($req){
-	    	return current ($this->find($req));
-	    }
+
 
 	    public function debug($c){
 			echo '<pre>';
 			print_r($c);
 			echo '</pre>';
 	    }
+
 
 
 

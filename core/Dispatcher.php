@@ -33,7 +33,13 @@ class Dispatcher{
 	function loadController(){	
 		$name = ucfirst($this->request->controller).'Controller';
 		$file = WEBROOT.DS.'controller'.DS.$name.'.php';
-		require $file;
-		return new $name($this->request);
+		if(file_exists($file)){
+			require $file;
+			return new $name($this->request);
+		}
+		else {
+			$this->error('Controller not found');
+		}
+		
 	}
 }

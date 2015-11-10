@@ -5,7 +5,10 @@
 */
 class PagesController extends Controller
 {
-	
+	/**
+	*FUNCTION VIEW 
+	*
+	**/
 	function view($id){
 		$this->loadModel('Post');
 		$d['page'] = $this->Post->findFirst(array(
