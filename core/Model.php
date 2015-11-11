@@ -103,7 +103,13 @@
 	                	 $sql .=  $cond;
 	                }
 	            }
-	        } 
+	        }
+	        //LIMIT ROWS
+	        if(isset($req['limit'])){
+	        	$sql .= ' LIMIT ' . $req['limit'];
+	        }
+	        //RETURN GENERATE SQL LINE
+	        return $sql;
 		}
 
 
@@ -120,15 +126,10 @@
 
 	        return $pre->fetchAll(PDO::FETCH_OBJ);
 
+
 	    }
 
-
-
-	    public function debug($c){
-			echo '<pre>';
-			print_r($c);
-			echo '</pre>';
-	    }
+	    
 
 
 

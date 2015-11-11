@@ -97,6 +97,22 @@ class Controller
 		$this->render('/errors/404');
 	}
 
+	/**
+	*FUNCTION SUBSTR
+	*@param  $p : paragraphe
+	*@param  $nbr : length to display
+	**/
+	function getLines($p, $nbr){
+		return substr($p, 0, $nbr); 
+	}
+
+	
+    public function debug($c){
+		echo '<pre>';
+		print_r($c);
+		echo '</pre>';
+    }
+
 }
 
 ?>

@@ -25,7 +25,7 @@ class Dispatcher{
 	}
 
 	//FUNCTION ERROR 404 NOT FOUND
-	function error($msg){
+	function error($message){
 		$controller = new Controller($this->request);
 		$controller->e404($message);
 	}

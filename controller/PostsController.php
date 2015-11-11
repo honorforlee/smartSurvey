@@ -23,13 +23,12 @@ class PostsController extends Controller
 	**/
 	function view($id){
 		$this->loadModel('Post');
-		$d['posts'] = $this->Post->findFirst(array(
+		$d['posts'] = $this->Post->find(array(
 			'conditions' => 'id='.$id
 		));
 		if(empty($d['posts'])){
 			$this->e404('Page introuvable');
 		}
-
 		$this->set($d);
 	}
 
@@ -42,6 +41,7 @@ class PostsController extends Controller
 			'conditions' => array('online' =>1, 'type_page'=>'post')
 		));
 	}
+
 
 
 
